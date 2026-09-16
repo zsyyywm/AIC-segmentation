@@ -2,6 +2,33 @@
 
 本文只说明拿到项目后如何开发独立版本和提交分支。环境、数据检查、训练和提交产物的命令见 `setup.md`；模型原理见 `model.md`。
 
+## 0. 生成本地data目录
+
+官方数据不进入Git仓库，由维护者另行分发。成员拿到官方原始数据后，先将其解压到项目根目录下，保持如下结构：
+
+```text
+2026-低空图像语义分割赛道-训练集/
+  train/train/images/
+  train/train/masks/
+  test_1/images/
+```
+
+然后在项目根目录执行：
+
+```bash
+python prepare_data_split.py
+```
+
+脚本默认读取项目内固定划分清单 `data_splits/fold_0_train.txt` 和 `data_splits/fold_0_val.txt`，生成本地 `data/`。这样每个成员得到相同的训练集、验证集和测试图像目录。
+
+如果原始数据没有放在项目根目录，可以使用相对路径指定位置，例如：
+
+```bash
+python prepare_data_split.py --raw-root ../AIC_raw/2026-低空图像语义分割赛道-训练集
+```
+
+不要把 `data/`、官方原始数据、权重、日志或提交zip上传到GitHub。
+
 ## 1. 协作流程
 
 维护者提供基线代码与说明，官方数据另行交给有权限的参赛成员。成员先用 `tools/check_uploaded_dataset.py` 核验数据，再学习基线、创建版本、提交分支。维护者选择审核与合并，并下载选定代码执行训练。
