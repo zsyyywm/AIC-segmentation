@@ -1,0 +1,15 @@
+﻿data/
+runs/
+work_dirs/
+submission/
+best/
+*.pth
+*.pt
+*.ckpt
+*.zip
+*.log
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.DS_Store
+Thumbs.db
