@@ -1,15 +1,29 @@
-﻿data/
-runs/
-work_dirs/
-submission/
-best/
+# Official competition data and generated experiment artifacts
+data/
+**/runs/
+**/predictions/
+**/submission/
+**/submissions/
+
+# Model weights and packaged predictions
 *.pth
 *.pt
 *.ckpt
 *.zip
-*.log
+
+# Python caches and local environments
 __pycache__/
+*.py[cod]
 .pytest_cache/
 .mypy_cache/
+.venv/
+venv/
+
+# Editor, OS and local secret files
+.idea/
+.vscode/
 .DS_Store
 Thumbs.db
+.env
+.env.*
+!.env.example

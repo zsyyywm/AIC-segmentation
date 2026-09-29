@@ -1,6 +1,6 @@
 # 模型与指标
 
-本文只解释模型与指标。运行操作见 `setup.md`，创建版本与修改代码的位置见 `development.md`，各版本具体设置与结果见对应 `version_notes.md`。
+本文只解释模型与指标。公共环境及实验后处理操作见 `setup.md`，各版本训练命令见对应 `version_notes.md`，创建版本与修改代码的位置见 `development.md`。
 
 ## 1. 各组件是什么
 
