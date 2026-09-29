@@ -1,5 +1,9 @@
 # Official competition data and generated experiment artifacts
-data/
+data/*
+!data/splits/
+!data/splits/**
+!data/split_summary.json
+材料/
 **/runs/
 **/predictions/
 **/submission/

@@ -1,0 +1,303 @@
+{
+  "seed": 2026,
+  "folds": 5,
+  "default_validation_fold": 0,
+  "storage": "hard_links",
+  "fold_summary": {
+    "fold_0": {
+      "images": 1400,
+      "classes": {
+        "0": {
+          "name": "Ignore",
+          "images_present": 79,
+          "pixels": 18798232,
+          "share_of_all_class_pixels_pct": 18.8677
+        },
+        "1": {
+          "name": "Background",
+          "images_present": 1355,
+          "pixels": 411698335,
+          "share_of_all_class_pixels_pct": 20.3115
+        },
+        "2": {
+          "name": "Building",
+          "images_present": 924,
+          "pixels": 270573065,
+          "share_of_all_class_pixels_pct": 20.4586
+        },
+        "3": {
+          "name": "Road",
+          "images_present": 873,
+          "pixels": 133619123,
+          "share_of_all_class_pixels_pct": 20.6992
+        },
+        "4": {
+          "name": "Water",
+          "images_present": 500,
+          "pixels": 83726604,
+          "share_of_all_class_pixels_pct": 18.3922
+        },
+        "5": {
+          "name": "Barren",
+          "images_present": 203,
+          "pixels": 26219581,
+          "share_of_all_class_pixels_pct": 19.7513
+        },
+        "6": {
+          "name": "Vegetation",
+          "images_present": 1213,
+          "pixels": 417070286,
+          "share_of_all_class_pixels_pct": 20.0268
+        },
+        "7": {
+          "name": "Agricultural",
+          "images_present": 228,
+          "pixels": 94425772,
+          "share_of_all_class_pixels_pct": 18.3707
+        },
+        "8": {
+          "name": "Vehicle",
+          "images_present": 388,
+          "pixels": 11875402,
+          "share_of_all_class_pixels_pct": 20.9529
+        }
+      }
+    },
+    "fold_1": {
+      "images": 1399,
+      "classes": {
+        "0": {
+          "name": "Ignore",
+          "images_present": 82,
+          "pixels": 19746489,
+          "share_of_all_class_pixels_pct": 19.8194
+        },
+        "1": {
+          "name": "Background",
+          "images_present": 1359,
+          "pixels": 413655344,
+          "share_of_all_class_pixels_pct": 20.408
+        },
+        "2": {
+          "name": "Building",
+          "images_present": 928,
+          "pixels": 263751334,
+          "share_of_all_class_pixels_pct": 19.9428
+        },
+        "3": {
+          "name": "Road",
+          "images_present": 894,
+          "pixels": 129016108,
+          "share_of_all_class_pixels_pct": 19.9862
+        },
+        "4": {
+          "name": "Water",
+          "images_present": 509,
+          "pixels": 82642276,
+          "share_of_all_class_pixels_pct": 18.154
+        },
+        "5": {
+          "name": "Barren",
+          "images_present": 234,
+          "pixels": 26316776,
+          "share_of_all_class_pixels_pct": 19.8245
+        },
+        "6": {
+          "name": "Vegetation",
+          "images_present": 1224,
+          "pixels": 412103355,
+          "share_of_all_class_pixels_pct": 19.7883
+        },
+        "7": {
+          "name": "Agricultural",
+          "images_present": 250,
+          "pixels": 109019543,
+          "share_of_all_class_pixels_pct": 21.21
+        },
+        "8": {
+          "name": "Vehicle",
+          "images_present": 354,
+          "pixels": 10706599,
+          "share_of_all_class_pixels_pct": 18.8907
+        }
+      }
+    },
+    "fold_2": {
+      "images": 1399,
+      "classes": {
+        "0": {
+          "name": "Ignore",
+          "images_present": 83,
+          "pixels": 20257243,
+          "share_of_all_class_pixels_pct": 20.3321
+        },
+        "1": {
+          "name": "Background",
+          "images_present": 1353,
+          "pixels": 392169191,
+          "share_of_all_class_pixels_pct": 19.348
+        },
+        "2": {
+          "name": "Building",
+          "images_present": 926,
+          "pixels": 262145853,
+          "share_of_all_class_pixels_pct": 19.8214
+        },
+        "3": {
+          "name": "Road",
+          "images_present": 887,
+          "pixels": 133018765,
+          "share_of_all_class_pixels_pct": 20.6062
+        },
+        "4": {
+          "name": "Water",
+          "images_present": 506,
+          "pixels": 97425369,
+          "share_of_all_class_pixels_pct": 21.4014
+        },
+        "5": {
+          "name": "Barren",
+          "images_present": 211,
+          "pixels": 26094774,
+          "share_of_all_class_pixels_pct": 19.6572
+        },
+        "6": {
+          "name": "Vegetation",
+          "images_present": 1215,
+          "pixels": 416882560,
+          "share_of_all_class_pixels_pct": 20.0178
+        },
+        "7": {
+          "name": "Agricultural",
+          "images_present": 247,
+          "pixels": 107587491,
+          "share_of_all_class_pixels_pct": 20.9314
+        },
+        "8": {
+          "name": "Vehicle",
+          "images_present": 362,
+          "pixels": 11376578,
+          "share_of_all_class_pixels_pct": 20.0728
+        }
+      }
+    },
+    "fold_3": {
+      "images": 1399,
+      "classes": {
+        "0": {
+          "name": "Ignore",
+          "images_present": 87,
+          "pixels": 19904347,
+          "share_of_all_class_pixels_pct": 19.9779
+        },
+        "1": {
+          "name": "Background",
+          "images_present": 1358,
+          "pixels": 413977864,
+          "share_of_all_class_pixels_pct": 20.424
+        },
+        "2": {
+          "name": "Building",
+          "images_present": 915,
+          "pixels": 269905677,
+          "share_of_all_class_pixels_pct": 20.4082
+        },
+        "3": {
+          "name": "Road",
+          "images_present": 870,
+          "pixels": 123720960,
+          "share_of_all_class_pixels_pct": 19.1659
+        },
+        "4": {
+          "name": "Water",
+          "images_present": 520,
+          "pixels": 92504867,
+          "share_of_all_class_pixels_pct": 20.3205
+        },
+        "5": {
+          "name": "Barren",
+          "images_present": 221,
+          "pixels": 25507433,
+          "share_of_all_class_pixels_pct": 19.2148
+        },
+        "6": {
+          "name": "Vegetation",
+          "images_present": 1238,
+          "pixels": 412690153,
+          "share_of_all_class_pixels_pct": 19.8165
+        },
+        "7": {
+          "name": "Agricultural",
+          "images_present": 224,
+          "pixels": 96877129,
+          "share_of_all_class_pixels_pct": 18.8476
+        },
+        "8": {
+          "name": "Vehicle",
+          "images_present": 372,
+          "pixels": 11869394,
+          "share_of_all_class_pixels_pct": 20.9423
+        }
+      }
+    },
+    "fold_4": {
+      "images": 1399,
+      "classes": {
+        "0": {
+          "name": "Ignore",
+          "images_present": 84,
+          "pixels": 20925748,
+          "share_of_all_class_pixels_pct": 21.003
+        },
+        "1": {
+          "name": "Background",
+          "images_present": 1352,
+          "pixels": 395422134,
+          "share_of_all_class_pixels_pct": 19.5085
+        },
+        "2": {
+          "name": "Building",
+          "images_present": 899,
+          "pixels": 256161343,
+          "share_of_all_class_pixels_pct": 19.3689
+        },
+        "3": {
+          "name": "Road",
+          "images_present": 843,
+          "pixels": 126151542,
+          "share_of_all_class_pixels_pct": 19.5424
+        },
+        "4": {
+          "name": "Water",
+          "images_present": 502,
+          "pixels": 98929599,
+          "share_of_all_class_pixels_pct": 21.7318
+        },
+        "5": {
+          "name": "Barren",
+          "images_present": 229,
+          "pixels": 28610293,
+          "share_of_all_class_pixels_pct": 21.5522
+        },
+        "6": {
+          "name": "Vegetation",
+          "images_present": 1204,
+          "pixels": 423817110,
+          "share_of_all_class_pixels_pct": 20.3507
+        },
+        "7": {
+          "name": "Agricultural",
+          "images_present": 243,
+          "pixels": 106091400,
+          "share_of_all_class_pixels_pct": 20.6403
+        },
+        "8": {
+          "name": "Vehicle",
+          "images_present": 370,
+          "pixels": 10848655,
+          "share_of_all_class_pixels_pct": 19.1413
+        }
+      }
+    }
+  }
+}
