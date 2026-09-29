@@ -1,0 +1,6 @@
+# Install inside the existing MMSeg experiment environment, not system Python.
+numpy
+Pillow
+psutil
+# Optional native backend; compilation availability must be checked on the server.
+pydensecrf==1.0rc3

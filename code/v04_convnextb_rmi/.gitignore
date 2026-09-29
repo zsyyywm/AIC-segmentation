@@ -1,0 +1,6 @@
+runs/
+predictions/
+submissions/
+*.pth
+__pycache__/
+*.py[cod]

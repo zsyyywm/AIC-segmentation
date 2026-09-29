@@ -1,4 +1,4 @@
-"""ConvNeXt-L + UPerNet baseline for the AIC segmentation competition."""
+"""ConvNeXt-L + UPerNet with D4, Lovasz loss and GroupNorm."""
 
 custom_imports = dict(
     imports=['mmpretrain.models', 'aicseg'], allow_failed_imports=False)
@@ -6,14 +6,14 @@ default_scope = 'mmseg'
 
 crop_size = (768, 768)
 num_classes = 8
-experiment_name = 'b0_convnextl_upernet_768'
+experiment_name = 'v02_convnextl_d4_lovasz_gn_768'
 train_size = 5596
 data_root = '../../data'
 max_iters = 80000
 val_interval = 8000
 
 
-norm_cfg = dict(type='BN', requires_grad=True)
+norm_cfg = dict(type='GN', num_groups=32, requires_grad=True)
 data_preprocessor = dict(
     type='SegDataPreProcessor',
     mean=[123.675, 116.28, 103.53],
@@ -51,11 +51,21 @@ model = dict(
         ignore_index=255,
         norm_cfg=norm_cfg,
         align_corners=False,
-        loss_decode=dict(
-            type='CrossEntropyLoss',
-            use_sigmoid=False,
-            loss_weight=1.0,
-            avg_non_ignore=True)),
+        loss_decode=[
+            dict(
+                type='CrossEntropyLoss',
+                use_sigmoid=False,
+                loss_weight=1.0,
+                avg_non_ignore=True),
+            dict(
+                type='LovaszLoss',
+                loss_type='multi_class',
+                classes='present',
+                per_image=False,
+                reduction='none',
+                loss_weight=0.5,
+                loss_name='loss_lovasz')
+        ]),
     auxiliary_head=dict(
         type='FCNHead',
         in_channels=768,
@@ -85,7 +95,7 @@ train_pipeline = [
         ratio_range=(0.5, 2.0),
         keep_ratio=True),
     dict(type='RandomCrop', crop_size=crop_size, cat_max_ratio=0.75),
-    dict(type='RandomFlip', prob=0.5, direction='horizontal'),
+    dict(type='RandomD4'),
     dict(type='PhotoMetricDistortion'),
     dict(type='PackSegInputs'),
 ]
@@ -198,4 +208,4 @@ log_level = 'INFO'
 load_from = None
 resume = False
 randomness = dict(seed=2026, deterministic=False)
-work_dir = 'runs/convnext_large_upernet_768'
+work_dir = 'runs/v02_convnextl_d4_lovasz_gn_768'

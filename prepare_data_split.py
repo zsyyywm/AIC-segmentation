@@ -1,10 +1,8 @@
 from __future__ import annotations
 
-import argparse
 import csv
 import json
 import os
-import shutil
 from pathlib import Path
 
 import numpy as np
@@ -94,72 +92,11 @@ def choose_folds(counts: np.ndarray, features: np.ndarray) -> np.ndarray:
     return best_assignment
 
 
-def materialize_file(source: Path, destination: Path, mode: str) -> None:
+def hardlink(source: Path, destination: Path) -> None:
     destination.parent.mkdir(parents=True, exist_ok=True)
     if destination.exists():
         raise FileExistsError(f"Refusing to overwrite existing path: {destination}")
-    if mode == "copy":
-        shutil.copy2(source, destination)
-        return
-    try:
-        os.link(source, destination)
-    except OSError:
-        shutil.copy2(source, destination)
-
-
-def read_split_list(path: Path) -> list[str]:
-    if not path.is_file():
-        raise FileNotFoundError(f"Split file does not exist: {path}")
-    names = [
-        line.strip()
-        for line in path.read_text(encoding="utf-8").splitlines()
-        if line.strip()
-    ]
-    duplicates = sorted({name for name in names if names.count(name) > 1})
-    if duplicates:
-        raise ValueError(f"Duplicate filenames in {path}: {duplicates[:5]}")
-    return names
-
-
-def parse_args() -> argparse.Namespace:
-    workspace = Path(__file__).resolve().parent
-    parser = argparse.ArgumentParser(
-        description=(
-            "Build the project data/ directory from the official raw dataset "
-            "using fixed split txt files."
-        )
-    )
-    parser.add_argument(
-        "--raw-root",
-        default=str(workspace / "2026-低空图像语义分割赛道-训练集"),
-        help="Official extracted dataset root that contains train/train and test_1.",
-    )
-    parser.add_argument(
-        "--out-root",
-        default=str(workspace / "data"),
-        help="Output data directory to create.",
-    )
-    parser.add_argument(
-        "--split-dir",
-        default=str(workspace / "data_splits"),
-        help="Directory containing fold_<N>_train.txt and fold_<N>_val.txt.",
-    )
-    parser.add_argument(
-        "--fold",
-        type=int,
-        default=0,
-        help="Validation fold id. Default: 0.",
-    )
-    parser.add_argument(
-        "--mode",
-        choices=["hardlink", "copy"],
-        default="hardlink",
-        help=(
-            "Use hard links when possible to save disk space. If hardlink fails, "
-            "the script automatically falls back to copy."
-        ),
-    )
-    return parser.parse_args()
+    os.link(source, destination)
 
 
 def summarize(counts: np.ndarray, assignment: np.ndarray) -> dict[str, object]:
@@ -187,65 +124,60 @@ def summarize(counts: np.ndarray, assignment: np.ndarray) -> dict[str, object]:
 
 
 def main() -> None:
-    args = parse_args()
-    source = Path(args.raw_root).expanduser().resolve()
+    workspace = Path(__file__).resolve().parent
+    source = workspace / "2026-低空图像语义分割赛道-训练集"
     train_images = source / "train" / "train" / "images"
     train_masks = source / "train" / "train" / "masks"
     test_images = source / "test_1" / "images"
-    output = Path(args.out_root).expanduser().resolve()
-    split_source = Path(args.split_dir).expanduser().resolve()
-    train_split = split_source / f"fold_{args.fold}_train.txt"
-    val_split = split_source / f"fold_{args.fold}_val.txt"
+    output = workspace / "data"
 
     if output.exists():
         raise FileExistsError(f"Output directory already exists: {output}")
 
-    image_by_name = {path.name: path for path in sorted(train_images.glob("*.png"))}
-    mask_by_name = {path.name: path for path in sorted(train_masks.glob("*.png"))}
-    if len(image_by_name) != 6996 or set(image_by_name) != set(mask_by_name):
+    image_paths = sorted(train_images.glob("*.png"))
+    mask_paths = sorted(train_masks.glob("*.png"))
+    image_by_stem = {path.stem: path for path in image_paths}
+    mask_by_stem = {path.stem: path for path in mask_paths}
+    stems = sorted(image_by_stem.keys())
+    if len(stems) != 6996 or set(stems) != set(mask_by_stem):
         raise ValueError("Training images and masks are incomplete or do not match")
 
-    train_names = read_split_list(train_split)
-    val_names = read_split_list(val_split)
-    overlap = sorted(set(train_names) & set(val_names))
-    if overlap:
-        raise ValueError(f"Train/val split overlap: {overlap[:5]}")
-    expected = set(image_by_name)
-    actual = set(train_names) | set(val_names)
-    if actual != expected:
-        missing = sorted(expected - actual)
-        extra = sorted(actual - expected)
-        raise ValueError(
-            "Split files do not match official training files. "
-            f"missing={missing[:5]}, extra={extra[:5]}"
-        )
+    counts = read_mask_counts([mask_by_stem[stem] for stem in stems])
+    features = build_stratification_features(counts)
+    assignment = choose_folds(counts, features)
 
     split_dir = output / "splits"
     split_dir.mkdir(parents=True)
-    for path in sorted(split_source.glob("*")):
-        if path.is_file():
-            shutil.copy2(path, split_dir / path.name)
+    with (split_dir / "folds.csv").open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(["filename", "fold"])
+        writer.writerows((f"{stem}.png", int(fold)) for stem, fold in zip(stems, assignment))
 
-    for subset, names in (("train", train_names), ("val", val_names)):
-        for name in names:
-            materialize_file(
-                image_by_name[name], output / subset / "images" / name, args.mode
-            )
-            materialize_file(
-                mask_by_name[name], output / subset / "masks" / name, args.mode
-            )
+    for fold in range(N_FOLDS):
+        val_names = [f"{stem}.png" for stem, value in zip(stems, assignment) if value == fold]
+        train_names = [f"{stem}.png" for stem, value in zip(stems, assignment) if value != fold]
+        (split_dir / f"fold_{fold}_train.txt").write_text(
+            "\n".join(train_names) + "\n", encoding="utf-8"
+        )
+        (split_dir / f"fold_{fold}_val.txt").write_text(
+            "\n".join(val_names) + "\n", encoding="utf-8"
+        )
+
+    # Materialize fold 0 as the default development split using space-saving hard links.
+    for stem, fold in zip(stems, assignment):
+        subset = "val" if fold == 0 else "train"
+        hardlink(image_by_stem[stem], output / subset / "images" / f"{stem}.png")
+        hardlink(mask_by_stem[stem], output / subset / "masks" / f"{stem}.png")
 
     for path in sorted(test_images.glob("*.png")):
-        materialize_file(path, output / "test" / "images" / path.name, args.mode)
+        hardlink(path, output / "test" / "images" / path.name)
 
     summary = {
-        "split_dir": str(split_source),
-        "validation_fold": args.fold,
-        "storage": args.mode,
-        "hardlink_fallback": "copy",
-        "train_images": len(train_names),
-        "val_images": len(val_names),
-        "test_images": len(list(test_images.glob("*.png"))),
+        "seed": SEED,
+        "folds": N_FOLDS,
+        "default_validation_fold": 0,
+        "storage": "hard_links",
+        "fold_summary": summarize(counts, assignment),
     }
     (output / "split_summary.json").write_text(
         json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
@@ -257,9 +189,9 @@ def main() -> None:
         "- `val/`: 20% validation images and masks\n"
         "- `test/`: official test_1 images; never use these for training\n"
         "- `splits/`: reproducible manifests for all five folds\n\n"
-        "The split is loaded from fixed txt files in `data_splits/`. "
-        "Hard links are used by default when supported; otherwise files are copied. "
-        "Do not treat Examples as extra data; those files duplicate training samples 0000-0010.\n",
+        "Files under train, val, and test are hard links to the original extracted dataset, "
+        "so they consume almost no additional disk space. Do not treat Examples as extra data; "
+        "those files duplicate training samples 0000-0010.\n",
         encoding="utf-8",
     )
 
