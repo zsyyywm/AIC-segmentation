@@ -1,0 +1,4 @@
+# Preserve the frozen byte hashes, including copied CRLF Python sources.
+* -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+# Linux entry points must retain LF when checked out on Windows or Linux.
+tools/*.sh text eol=lf

@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "m0_freeze_id": "m0_core_20261001_r1",
+  "prototype_contract": "aic-p-ema-v1",
+  "sources": {
+    "aicseg/__init__.py": {
+      "source": "code/v1_m0_mask2former/aicseg/__init__.py",
+      "sha256": "8a2e4dbe4e2e5a1500c6b13d280876014613fd9d15584a7a3b459b8c9d693b0a",
+      "origin": "M0",
+      "changes": [
+        "register MP head and frozen P diagnostic hook"
+      ]
+    },
+    "aicseg/dataset.py": {
+      "source": "code/v1_m0_mask2former/aicseg/dataset.py",
+      "sha256": "2b96d9b8a395a740e67e97c0cad8ebd64ddc723c4155072f1d0c7724592924d4",
+      "origin": "M0",
+      "changes": []
+    },
+    "aicseg/hooks.py": {
+      "source": "code/v1_m0_mask2former/aicseg/hooks.py",
+      "sha256": "7294f351840ba7eceaa74be2183ab654c9684b461a614751ef43201d0a03c018",
+      "origin": "M0",
+      "changes": []
+    },
+    "aicseg/mask2former_head.py": {
+      "source": "code/v1_m0_mask2former/aicseg/mask2former_head.py",
+      "sha256": "2936fbbf5590c871b6ceb00ce89ab653c85c37134a2d79766d25637263ad96d4",
+      "origin": "M0",
+      "changes": []
+    },
+    "aicseg/metrics.py": {
+      "source": "code/v1_m0_mask2former/aicseg/metrics.py",
+      "sha256": "b3684ad2dd6146ca5b8f1de8b9bcf291a121395d889991aa2aa51d18b97cc0f3",
+      "origin": "M0",
+      "changes": []
+    },
+    "aicseg/optimizer.py": {
+      "source": "code/v1_m0_mask2former/aicseg/optimizer.py",
+      "sha256": "2aa7d9c957f4c1619d3d4b7b222ff12fb8205360c213dce6c21a5117a5fa25ee",
+      "origin": "M0",
+      "changes": []
+    },
+    "aicseg/transforms.py": {
+      "source": "code/v1_m0_mask2former/aicseg/transforms.py",
+      "sha256": "e7b6310cf642ecc6325776669f255c807aeea2fe987d2e593f3120d9ccadf47c",
+      "origin": "M0",
+      "changes": []
+    },
+    "tools/_bootstrap.py": {
+      "source": "code/v1_m0_mask2former/tools/_bootstrap.py",
+      "sha256": "5a7359b7be2907aa38b5c3f97ae32f6bef538b893128f0fe27a4447435025e68",
+      "origin": "M0",
+      "changes": []
+    },
+    "tools/check_and_pack.py": {
+      "source": "code/v1_m0_mask2former/tools/check_and_pack.py",
+      "sha256": "a71db0a03a78fda193d7d93299d7a61dc342a44c468b1b26cc639294ba4ece8a",
+      "origin": "M0",
+      "changes": []
+    },
+    "tools/monitor_training.py": {
+      "source": "code/v1_m0_mask2former/tools/monitor_training.py",
+      "sha256": "0e5ab1507b01800ca2612ca820a9a661fc1d7d8651acbf02376ffc9564af0dc7",
+      "origin": "M0",
+      "changes": [
+        "default configuration points to MP"
+      ]
+    },
+    "tools/predict_and_pack.py": {
+      "source": "code/v1_m0_mask2former/tools/predict_and_pack.py",
+      "sha256": "e05c08c6156e54d504e78344bde17a937ed8ad1a0ceb2b623b05a52c50902224",
+      "origin": "M0",
+      "changes": [
+        "default configuration points to MP"
+      ]
+    },
+    "tools/run_utils.py": {
+      "source": "code/v1_m0_mask2former/tools/run_utils.py",
+      "sha256": "4e0552ab6b4cef21be0611722af8abdb638dd4e9fa3f4b51fbc6fc4506f8ba9d",
+      "origin": "M0",
+      "changes": []
+    },
+    "tools/start_train.sh": {
+      "source": "code/v1_m0_mask2former/tools/start_train.sh",
+      "sha256": "e57680f4a0e14e3cb00b331540304da8849576f3fffc55b5a17d4bbb44234cec",
+      "origin": "M0",
+      "changes": [
+        "CRLF to LF only for Linux bash execution"
+      ]
+    },
+    "tools/submission.py": {
+      "source": "code/v1_m0_mask2former/tools/submission.py",
+      "sha256": "c5276944cc670d31991f92cd7205199d89607f8e62b4aa0498705ab0c14eb8ae",
+      "origin": "M0",
+      "changes": []
+    },
+    "tools/train.py": {
+      "source": "code/v1_m0_mask2former/tools/train.py",
+      "sha256": "77504d6f8628f12f52db225e3284d119a8800cfa79de071f656b98a5983593c0",
+      "origin": "M0",
+      "changes": [
+        "default configuration points to MP",
+        "record version-local source hashes, component versions and frozen P contract in each run"
+      ]
+    },
+    "requirements.txt": {
+      "source": "code/v1_m0_mask2former/requirements.txt",
+      "sha256": "67a519e2c4fed207e327a548a911937a1564e4d9a4f0977f5a51eb3d7ceb4319",
+      "origin": "M0",
+      "changes": []
+    },
+    "configs/m0_convnextb_mask2former_768.py": {
+      "source": "code/v1_m0_mask2former/configs/m0_convnextb_mask2former_768.py",
+      "sha256": "6e4be3e20710c00f6b9a7d963d6d51969c9021fd1011c476cdc65f62ce13d0a4",
+      "origin": "M0",
+      "changes": [
+        "experiment_name/work_dir identity only"
+      ]
+    },
+    "aicseg/prototype_core.py": {
+      "source": "code/v1_up_uper_proto/aicseg/prototype_core.py",
+      "sha256": "9a34dcc0d0816990a6852965032c8ecaa427b4f00b66a90009262bd373e714bb",
+      "origin": "UP",
+      "changes": []
+    },
+    "aicseg/prototype_hooks.py": {
+      "source": "code/v1_up_uper_proto/aicseg/prototype_hooks.py",
+      "sha256": "a61e295d60002e9a72153ce344f47c7b0b2163f03115b76cae9577a408c7e4a5",
+      "origin": "UP",
+      "changes": []
+    },
+    "prototype_contract.json": {
+      "source": "code/v1_up_uper_proto/prototype_contract.json",
+      "sha256": "c0f76bce46de8213c1df6aafd2210696abb62f61a952ce90d7ce68f709cd3ab0",
+      "origin": "UP",
+      "changes": []
+    },
+    "m0_source_freeze.json": {
+      "source": "code/v1_m0_mask2former/core_freeze_manifest.json",
+      "sha256": "41600453d7aed2bb517c7e06a2f58581c8a226ee513d6e6a542577a772f84fb0",
+      "origin": "M0",
+      "changes": []
+    }
+  },
+  "removed_for_github_release": {
+    "tools/validate_m0.py": {
+      "source_provenance": {
+        "source": "code/v1_m0_mask2former/tools/validate_m0.py",
+        "sha256": "e0196205d68344d624b492a42f6911bee31542fbe8a7e46e38cecb771f81e961",
+        "origin": "M0",
+        "changes": []
+      },
+      "removed_sha256": "e0196205d68344d624b492a42f6911bee31542fbe8a7e46e38cecb771f81e961",
+      "reason": "Unused duplicate M0-only validator; MP uses validate_mp.py",
+      "recoverable_from_commit": "970402b2daaa1dcb4d980a03ee4703bee17ae9c4"
+    },
+    "tools/package_version.py": {
+      "source_provenance": {
+        "source": "code/v1_m0_mask2former/tools/package_version.py",
+        "sha256": "0d22cdd5f625da8326d92a18443ef05bd34898d9fcc00551ffe04c2def482c56",
+        "origin": "M0",
+        "changes": [
+          "MP artifact name and MP source/contract manifest inclusion",
+          "include version-local Git newline rules"
+        ]
+      },
+      "removed_sha256": "13239aba7cea0ad1ea6be5f976af6aefe4fd6f7eb19ffd2f9c2ff20154f3ef64",
+      "reason": "One-time source-ZIP packaging tool; GitHub release uses the reviewed branch",
+      "recoverable_from_commit": "970402b2daaa1dcb4d980a03ee4703bee17ae9c4"
+    }
+  }
+}

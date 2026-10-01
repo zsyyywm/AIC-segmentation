@@ -1,0 +1,5 @@
+# Preserve copied M0 byte hashes, including legacy CRLF Python files.
+* -text whitespace=blank-at-eol,space-before-tab,cr-at-eol
+aicseg/prototype_core.py text eol=lf
+aicseg/prototype_hooks.py text eol=lf
+tools/start_train.sh text eol=lf

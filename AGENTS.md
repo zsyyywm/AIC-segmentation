@@ -4,7 +4,7 @@
 
 ## 1. 项目与事实依据
 
-- 本地唯一根目录：`C:/Users/34977/Desktop/junior1nd/AIC`，不得使用Documents/ChatGPT下的同名目录。
+- 本地唯一根目录：`%USERPROFILE%/Desktop/junior1nd/AIC`（Windows用户目录下的固定项目位置，执行前核对实际绝对路径），不得使用Documents/ChatGPT下的同名目录。
 - 服务器标准根目录：`/root/autodl-tmp/AIC`，实际run路径以服务器输出为准。
 - 官方基准：`材料/无人机低空航拍图像语义分割-2.pdf`。聊天、说明与官方依据冲突时立即报告，不自行放宽规则。
 - 信息优先级：官方通知/赛题规则 → 官方数据及Label.txt → 项目实测证据 → 实际配置与日志 → 团队未验证方案 → 外部经验。
@@ -40,7 +40,7 @@
 
 ## 5. 代码版本与成员协作
 
-- `code/baseline_v1` 保留原始历史基线；`code/v0` 归档 v02—v05 的数据增强与损失基线实验；`code/v1` 从 v04 实际配置建立结构改进控制入口。后续新模型改进在独立版本目录中进行，不覆盖这三处历史和控制单元。
+- `code/baseline_v1` 保留原始历史基线；v0数据增强与损失阶段已结束，`code/v0` 归档 v02—v05 的四组独立实验；当前进入v1结构改进阶段，`code/v1` 保留v04等价控制（U0），候选实现分别在 `code/v1_m0_mask2former`、`code/v1_up_uper_proto`、`code/v1_mp_mask2former_proto`。后续新模型改进在独立版本目录中进行，不覆盖历史和控制单元。
 - 每版维护 `version_notes.md`，只记录该版本情况、配置、改动与结果；创建目录、开发步骤和提交方式统一维护在 `docs/development.md`。
 - 共享 `code/mmsegmentation`、data和根目录tools，不重复复制或任意修改官方框架。
 - 项目自编文档只允许根目录一个README；版本文件夹使用version_notes，专题文档按职责命名。第三方框架原始README/LICENSE保持原样。

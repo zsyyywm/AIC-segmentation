@@ -6,6 +6,7 @@ data/*
 材料/
 **/runs/
 **/run/
+**/dist/
 **/predictions/
 **/submission/
 **/submissions/
@@ -15,12 +16,16 @@ data/*
 *.pt
 *.ckpt
 *.zip
+*.tar
+*.tar.gz
+*.tgz
 
 # Python caches and local environments
 __pycache__/
 *.py[cod]
 .pytest_cache/
 .mypy_cache/
+**/.cache/
 .venv/
 venv/
 

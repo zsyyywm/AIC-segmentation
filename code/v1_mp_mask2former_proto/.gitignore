@@ -1,0 +1,9 @@
+/.venv/
+/.cache/
+/runs/
+/dist/
+__pycache__/
+*.py[cod]
+*.pth
+*.pt
+*.zip

@@ -16,12 +16,15 @@ code/
   baseline_v1/                    原始参照，不在这里做新改进
   v0/                             v02—v05 数据增强与损失基线实验归档
   v1/                             网络结构改进阶段的 v04 等价控制入口
+  v1_m0_mask2former/               M0：Mask2Former结构对照
+  v1_up_uper_proto/                UP：UPerHead加多原型模块
+  v1_mp_mask2former_proto/          MP：Mask2Former加同一个多原型模块
   <独立候选版本>/                 后续成员分支中的新实验版本
 ```
 
 版本目录必须处于code同层，不嵌套到baseline、v0或v1内。每个可训练版本保留自己的configs、aicseg、tools、requirements和version_notes；共享项目根的data与tools以及同级框架。v1不继承或导入v0代码。
 
-v0 的四个配置对应原 `code/v02_convnextb_d4_lovasz_gn`、`v03_convnextb_abl`、`v04_convnextb_rmi`、`v05_convnextb_rmi_abl` 四个独立正式run；旧目录、当前配置和本地归档路径见 `code/v0/version_notes.md`。v1 是结构改进控制配置，当前无新run或新模型成绩。原始 `baseline_v1` 不随本轮迁移。历史产物与诊断仅在本地被Git忽略的 `runs/` 下保留，不随版本目录交付。
+v0阶段已结束。四个配置对应原 `code/v02_convnextb_d4_lovasz_gn`、`v03_convnextb_abl`、`v04_convnextb_rmi`、`v05_convnextb_rmi_abl` 四个独立正式run；旧目录、当前配置和本地归档路径见 `code/v0/version_notes.md`。当前v1系列以 `code/v1` 的U0控制为参照，M0、UP和MP各自保留独立实现及实验名；尚无这些新版本的正式训练或完整验证成绩。原始 `baseline_v1` 不随迁移。历史产物与诊断不随版本目录交付，实际保留状态以各版本说明和现存文件为准。
 
 根tools负责通用检查、曲线、单模型报告和比较；版本tools负责该版本的训练与底层推理。不要把公共脚本复制到各版本。
 
@@ -31,7 +34,7 @@ v0 的四个配置对应原 `code/v02_convnextb_d4_lovasz_gn`、`v03_convnextb_a
 2. 在code下新建独立候选版本目录，命名体现模型与主要改动，避免final2/new等名称；不要直接覆盖 v1 控制入口。
 3. 从起点复制 `configs/`、`aicseg/`、`tools/`、`requirements.txt`、`version_notes.md`。不要复制runs、预测目录、权重、pycache、图片；已有tests不属于启动训练必需文件。
 4. 更新该版本配置的 `experiment_name` 和run目录，防止与v0历史实验或v1控制run混淆。
-5. 在自己的版本中改代码，一次只改变一个主要因素。保留配置继承所依赖的文件；当前B继承同目录L配置，不能只复制B文件。
+5. 在自己的版本中改代码，一次只改变一个主要因素。保留配置继承所依赖的文件；v0的B配置依赖同目录L配置，v1控制配置是独立文件，UP与MP分别继承本版本内的控制或M0副本。
 
 不要只改文件夹名而仍把配置指向别的版本。保持同层结构后，现有 `../../data` 与相邻框架路径通常不用改；仍需逐项核验配置继承、工具的 `parents` 路径及独立模块导入。结构改动若要求损失或优化器参数分组调整，应单独列为变量并验证，不暗中并入控制配置。
 

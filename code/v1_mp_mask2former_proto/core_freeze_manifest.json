@@ -1,0 +1,49 @@
+{
+  "freeze_id": "mp_core_20261001_r1",
+  "version": "v1_mp_mask2former_proto",
+  "upstream_m0_freeze_id": "m0_core_20261001_r1",
+  "upstream_P_contract": "aic-p-ema-v1",
+  "validated": [
+    "version_local_config_registration",
+    "M0_bypass_output_and_loss_bitwise_parity",
+    "query_class_and_mask_path_gradients",
+    "ignore_padding_absent_class_handling",
+    "prediction_then_statistics_commit_backward_safety",
+    "no_GT_eval_no_bank_update",
+    "serialized_head_checkpoint_parity",
+    "classification_pretrained_340_exact_tensors",
+    "full_768_AMP_forward_backward",
+    "1024_slide_768_stride512",
+    "official_data_local_Runner_8micro_2AdamW_updates",
+    "same_protocol_M0_MP_resources",
+    "source_ZIP_extraction_config_registration_CPU_head_checks"
+  ],
+  "pending": [
+    "server_standard_environment_smoke",
+    "server_physical_batch2_resources",
+    "formal_training",
+    "full_validation_metrics",
+    "platform_score"
+  ],
+  "files": {
+    "aicseg/__init__.py": "59162d015a14dbae52277254bb4b303b6762592aa120f9343c2c62f4c608c7cc",
+    "aicseg/dataset.py": "2b96d9b8a395a740e67e97c0cad8ebd64ddc723c4155072f1d0c7724592924d4",
+    "aicseg/hooks.py": "7294f351840ba7eceaa74be2183ab654c9684b461a614751ef43201d0a03c018",
+    "aicseg/mask2former_head.py": "2936fbbf5590c871b6ceb00ce89ab653c85c37134a2d79766d25637263ad96d4",
+    "aicseg/metrics.py": "b3684ad2dd6146ca5b8f1de8b9bcf291a121395d889991aa2aa51d18b97cc0f3",
+    "aicseg/optimizer.py": "2aa7d9c957f4c1619d3d4b7b222ff12fb8205360c213dce6c21a5117a5fa25ee",
+    "aicseg/prototype_core.py": "9a34dcc0d0816990a6852965032c8ecaa427b4f00b66a90009262bd373e714bb",
+    "aicseg/prototype_hooks.py": "a61e295d60002e9a72153ce344f47c7b0b2163f03115b76cae9577a408c7e4a5",
+    "aicseg/prototype_mask2former_head.py": "821badc7579e8988448d5effb33ae9948263d21a13eca3ad493549e5dce02ab0",
+    "aicseg/transforms.py": "e7b6310cf642ecc6325776669f255c807aeea2fe987d2e593f3120d9ccadf47c",
+    "configs/m0_convnextb_mask2former_768.py": "6f27c550735653e1ae73f405f49a323c6933f6f95661f75ab9c431671fcf0ade",
+    "configs/mp_convnextb_mask2former_proto_768.py": "0c951e7463d56b633d399d793510ced8e8138d5b46d2e32ccbe1db7c986aac24",
+    "prototype_contract.json": "c0f76bce46de8213c1df6aafd2210696abb62f61a952ce90d7ce68f709cd3ab0",
+    "requirements.txt": "67a519e2c4fed207e327a548a911937a1564e4d9a4f0977f5a51eb3d7ceb4319",
+    "tools/_bootstrap.py": "5a7359b7be2907aa38b5c3f97ae32f6bef538b893128f0fe27a4447435025e68",
+    "tools/compare_resources.py": "33fff0ef2956b3cc411a303dc7d087a2548a857c11e060eaf43249a8586a7fc3",
+    "tools/train.py": "c166c6b93a47ecdfd3665696a8cb2566ae0d6423dbf51e8d7d672837dececd20",
+    "tools/validate_mp.py": "fe47a05caaa7f6078ed96cba47f7f349674d90e1749f84c1e5cde2345a647170",
+    "tools/verify_smoke.py": "909916d7f15bf03fb84cde83567f321bbfc0146267d78b37c6963963f0a36224"
+  }
+}

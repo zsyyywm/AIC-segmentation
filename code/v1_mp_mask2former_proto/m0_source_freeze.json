@@ -1,0 +1,27 @@
+{
+  "freeze_id": "m0_core_20261001_r1",
+  "version": "v1_m0_mask2former",
+  "validated": [
+    "config_registration",
+    "native_forward_bitwise_parity",
+    "full_valid_native_loss_parity",
+    "ignore_loss_matching_and_gradients",
+    "mixed_all_ignore_zero_contribution",
+    "stale_slide_pad_shape",
+    "complete_model_128_forward_backward",
+    "optimizer_backbone_parameter_group_parity"
+  ],
+  "pending": [
+    "classification_pretrained_loading",
+    "production_size_forward",
+    "server_smoke",
+    "formal_training"
+  ],
+  "files": {
+    "configs/m0_convnextb_mask2former_768.py": "6e4be3e20710c00f6b9a7d963d6d51969c9021fd1011c476cdc65f62ce13d0a4",
+    "aicseg/mask2former_head.py": "2936fbbf5590c871b6ceb00ce89ab653c85c37134a2d79766d25637263ad96d4",
+    "aicseg/optimizer.py": "2aa7d9c957f4c1619d3d4b7b222ff12fb8205360c213dce6c21a5117a5fa25ee",
+    "aicseg/__init__.py": "8a2e4dbe4e2e5a1500c6b13d280876014613fd9d15584a7a3b459b8c9d693b0a",
+    "requirements.txt": "67a519e2c4fed207e327a548a911937a1564e4d9a4f0977f5a51eb3d7ceb4319"
+  }
+}
