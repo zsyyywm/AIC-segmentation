@@ -11,7 +11,7 @@
 | `code/v04_convnextb_rmi` | `configs/v04_convnextb_rmi.py` | CE1.0 + RMI0.5 | 76.32 | `runs/archives/v0/v04_convnextb_rmi/20260930_200850_train/` |
 | `code/v05_convnextb_rmi_abl` | `configs/v05_convnextb_rmi_abl.py` | CE1.0 + RMI0.5 + ABL0.1 | 76.32 | `runs/archives/v0/v05_convnextb_rmi_abl/20260930_203814_train/` |
 
-表中归档路径相对 AIC 根目录。每个 B 配置在本目录继承对应的 L 配置，八个配置文件均随 v0 交付。L 文件是这些已执行 B 配置的继承依赖，不代表本轮执行过 L 训练；直接运行旧 L 配置仍引用原 `code/convnext-large_3rdparty_in21k_20220301-e6e0ea0a.pth`，不属于本轮验证入口。四个 B 配置均覆盖为公开 ConvNeXt-B 分类预训练地址，不依赖该本地权重。四个 B 配置继续使用各自原有 `experiment_name`；新训练 run 位于 `code/v0/runs/<experiment_name>/`，不会覆盖旧服务器 run。
+表中归档路径相对 AIC 根目录。每个 B 配置在本目录继承对应的 L 配置，八个配置文件均随 v0 交付。L 文件是这些已执行 B 配置的继承依赖，不代表本轮执行过 L 训练；其旧本地 ConvNeXt-L 权重路径已换为共享 MMSeg 配置所用的同名公开分类权重 URL，避免摘取 v0 后依赖未交付文件。四个 B 配置本来就覆盖为公开 ConvNeXt-B 分类预训练地址，因此这次 L 继承文件调整不改变四个已执行 B 实验的有效配置。四个 B 配置继续使用各自原有 `experiment_name`；新训练 run 位于 `code/v0/runs/<experiment_name>/`，不会覆盖旧服务器 run。
 
 历史服务器 run 的实际路径依次是：
 
