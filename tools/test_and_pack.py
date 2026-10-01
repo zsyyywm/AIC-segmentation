@@ -51,6 +51,15 @@ def model_root_from(path):
     raise ValueError(f'Cannot find model prediction entry point for: {path}')
 
 
+def explicit_model_root(value):
+    if value is None:
+        return None
+    root = Path(value).expanduser().resolve()
+    if not (root / 'tools/predict_and_pack.py').is_file():
+        raise ValueError(f'Model prediction entry point not found in: {root}')
+    return root
+
+
 def matching_runs(model_root, config=None):
     candidates = []
     runs_root = model_root / 'runs'
@@ -88,17 +97,18 @@ def infer_config(run_dir, explicit=None):
     raise ValueError('Cannot infer config beside the checkpoint; pass --config')
 
 
-def resolve_source(source, explicit_config=None):
+def resolve_source(source, explicit_config=None, model_dir=None):
     path = Path(source).expanduser().resolve()
     if not path.exists():
         raise ValueError(f'Source not found: {path}')
+    model_root = explicit_model_root(model_dir)
     if path.is_file() and path.suffix == '.pth':
         run_dir = resolve_run(path)
         checkpoint = path
         config = infer_config(run_dir, explicit_config)
-        return run_dir, checkpoint, config, model_root_from(config)
+        return run_dir, checkpoint, config, model_root or model_root_from(config)
     if path.is_file() and path.suffix == '.py':
-        model_root = model_root_from(path)
+        model_root = model_root or model_root_from(path)
         runs = matching_runs(model_root, path)
         if not runs:
             raise ValueError(f'No formal run with checkpoint matches: {path}')
@@ -108,16 +118,17 @@ def resolve_source(source, explicit_config=None):
         run_dir = path
         checkpoint = selected_checkpoint(run_dir)
         config = infer_config(run_dir, explicit_config)
-        return run_dir, checkpoint, config, model_root_from(config)
+        return run_dir, checkpoint, config, model_root or model_root_from(config)
     if path.is_dir() and (path / 'tools/predict_and_pack.py').is_file():
+        model_root = model_root or path
         config = (Path(explicit_config).expanduser().resolve()
                   if explicit_config else None)
-        runs = matching_runs(path, config)
+        runs = matching_runs(model_root, config)
         if not runs:
-            raise ValueError(f'No usable formal run found in: {path}')
+            raise ValueError(f'No usable formal run found in: {model_root}')
         run_dir, checkpoint = runs[-1]
         config = infer_config(run_dir, config)
-        return run_dir, checkpoint, config, path
+        return run_dir, checkpoint, config, model_root
     raise ValueError('Source must be a run directory, checkpoint, config, or model directory')
 
 
@@ -125,10 +136,13 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('source')
     parser.add_argument('--config', help='Only needed when config cannot be inferred')
+    parser.add_argument('--model-dir',
+                        help='Model unit containing tools/predict_and_pack.py; '
+                             'required for archived runs outside code/')
     args = parser.parse_args()
     try:
         run_dir, checkpoint, config, model_root = resolve_source(
-            args.source, args.config)
+            args.source, args.config, args.model_dir)
         output_dir = run_dir / 'submission' / checkpoint.stem
         zip_path = output_dir / f'{checkpoint.stem}.zip'
         if output_dir.exists() and any(output_dir.iterdir()):

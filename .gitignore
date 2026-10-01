@@ -5,6 +5,7 @@ data/*
 !data/split_summary.json
 材料/
 **/runs/
+**/run/
 **/predictions/
 **/submission/
 **/submissions/

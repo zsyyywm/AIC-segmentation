@@ -6,7 +6,7 @@
 
 推荐单卡4090/4090D 24GB、CPU至少8核、内存至少32GB、数据盘150GB；镜像Python3.10/PyTorch2.1.0/CUDA12.1。
 
-项目放在 `/root/autodl-tmp/AIC`，保持 `code/`、`data/`、`tools/` 同级，MMSegmentation与各模型版本目录同级。不要只上传某个版本目录。
+标准项目放在 `/root/autodl-tmp/AIC`，保持 `code/`、`data/`、`tools/` 同级，MMSegmentation与各模型版本目录同级。初次部署需具备这些共享目录；标准项目已预先就位时，成员只上传自己的完整版本目录即可。
 
 ```bash
 export AIC_ROOT=/root/autodl-tmp/AIC
@@ -86,7 +86,7 @@ python "$AIC_ROOT/tools/analyze_experiment.py" "$RUN_DIR"
 python "$AIC_ROOT/tools/plot_training.py" "$RUN_DIR"
 ```
 
-分析脚本读取run中的已有验证记录，不会在官方测试集上计算真实分数。代表值、最终值、AUC和每类IoU的含义见 `model.md`；不能只用最佳mIoU判断一个方案。
+分析脚本读取run中的已有验证记录；当导出的历史run没有 `scalars.json` 时，可从原 `console.log` 回退解析，并在报告中标记来源。它不会在官方测试集上计算真实分数。代表值、最终值、AUC和每类IoU的含义见 `model.md`；不能只用最佳mIoU判断一个方案。该入口会追加 `result.md`，重复分析同一历史run前先检查是否已有记录。
 
 ## 6. 比较两个正式实验
 
@@ -119,10 +119,20 @@ python "$AIC_ROOT/tools/test_and_pack.py" /absolute/path/to/checkpoint.pth \
   --config /absolute/path/to/resolved_config.py
 ```
 
+本地历史run移到 `runs/archives/v0/` 后，解析快照仍记载旧路径。对有实际checkpoint的归档，显式指定原快照和新的模型目录：
+
+```bash
+python "$AIC_ROOT/tools/test_and_pack.py" "$RUN_DIR" \
+  --config /absolute/path/to/original/resolved_config.py \
+  --model-dir "$MODEL_DIR"
+```
+
+本地v02、v04、v05归档没有checkpoint，不能仅凭日志中的checkpoint文件名执行推理；v03归档有实际最佳权重。命令执行前须核对归档manifest与所选模型目录的对应关系。
+
 上传平台前记录实际run、checkpoint、配置、ZIP及其SHA256。ZIP生成成功只证明格式检查通过，不代表精度或全部赛规已经确认。
 
 ## 8. 保存与迁移实验产物
 
-每个正式run保留console、manifest、summary、全部scalars、解析配置、曲线、最佳权重，以及恢复训练所需的最近checkpoint和 `last_checkpoint`。根 `result.md` 单独保留；版本差异和训练命令只更新对应 `version_notes.md`。
+每个新正式run应保留console、manifest、summary、全部scalars、解析配置、曲线、最佳权重，以及恢复训练所需的最近checkpoint和 `last_checkpoint`。历史本地导出若缺失scalars或checkpoint，应如实列明，不能根据文件名补造。根 `result.md` 单独保留；版本差异和训练命令只更新对应 `version_notes.md`。
 
 释放实例前备份run与提交产物，并确认数据盘保留方式。本地没有服务器日志时，不根据当前默认配置反推历史实验设置或宣称复现成功。

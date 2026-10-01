@@ -1,12 +1,12 @@
 # AIC 航拍图像语义分割
 
-以ConvNeXt-B + UPerNet为基线的单模型语义分割项目。成员基于共享代码创建独立改进版本、提交分支，由维护者审核、选择合并并执行最终训练。
+以ConvNeXt-B + UPerHead为基线的单模型语义分割项目。第一轮数据增强与损失实验归档为v0；v1已建立v04等价的结构改进控制配置，后续网络设计另行开展。
 
 ## 快速开始
 
 1. 拉取项目并初始化 `code/mmsegmentation` 子模块，将另行收到的官方数据放入根目录 `data/`。
 2. 按 [全局复现与训练后操作](docs/setup.md) 检查数据、复现环境，并对完成的run进行分析、测试推理和提交打包。
-3. 阅读所用版本的 `version_notes.md`，获取该版本唯一有效的训练命令、配置、预算与验证状态；基线见 [基线说明](code/baseline_v1/version_notes.md)。
+3. 阅读所用版本的 `version_notes.md`，获取该版本的配置、训练命令、预算与验证状态；第一轮见 [v0说明](code/v0/version_notes.md)，结构控制入口见 [v1说明](code/v1/version_notes.md)，原始基线见 [baseline说明](code/baseline_v1/version_notes.md)。
 4. 按 [成员开发指南](docs/development.md) 在code中创建自己的版本、修改并提交分支。
 
 修改前遵守 [协作与赛事底线](AGENTS.md)。理解模型可选读 [模型说明](docs/model.md)，核对标签和划分可选读 [数据规范](docs/data_spec.md)。
@@ -16,7 +16,9 @@
 | 位置 | 内容 |
 |---|---|
 | `code/baseline_v1/` | 原始基线及其 `version_notes.md`，不直接覆盖 |
-| `code/<改进版本>/` | 成员独立修改的源码、配置及版本说明 |
+| `code/v0/` | v02—v05 的四组数据增强与损失实验配置、源码和历史映射 |
+| `code/v1/` | v04等价的网络结构改进控制配置，尚无新模型 |
+| `code/<改进版本>/` | 后续成员独立修改的源码、配置及版本说明 |
 | `code/mmsegmentation/` | 各版本共享的官方框架，保持原样 |
 | `tools/` | 各版本共用的数据检查、绘图、单模型分析、对比和提交工具 |
 | `data/` | 官方图像、mask和固定划分，图片只读 |
@@ -25,19 +27,18 @@
 | `AGENTS.md` | 需求澄清、协作与赛事约束 |
 
 各版本训练时自动生成 `runs/<实验名>/<时间戳>_train/`，保存配置、日志、权重和趋势图。同一代码版本可训练多次，结果不覆盖。
+v0旧版的本地导出位于被Git忽略的根 `runs/archives/v0/`；v03诊断仍在 `runs/diagnostics/20260930_barren/`。这些路径不属于GitHub交付物。
 
 ## 当前进度
 
 | 版本/组件 | 当前状态 | 已有证据 | 下一步 |
 |---|---|---|---|
 | `baseline_v1` | 已完成一次ConvNeXt-B 40k正式训练 | 本地已归档服务器run、日志、配置快照和最佳权重；最佳验证mIoU 74.41。平台64.4665来源于成员反馈 | 作为后续版本比较基准 |
-| `v02_convnextb_d4_lovasz_gn` | 代码与本地静态/合成检查完成 | 尚无服务器smoke、正式run或提升结论 | 先完成不超过300 iter的服务器smoke |
-| `v03_convnextb_abl` | ABL候选代码完成 | CPU单元测试17项通过、1项CUDA测试跳过；尚无服务器验证 | 审核后独立smoke |
-| `v04_convnextb_rmi` | RMI候选代码完成 | CPU单元测试14项通过、1项CUDA测试跳过；尚无服务器验证 | 审核后独立smoke |
-| `v05_convnextb_rmi_abl` | RMI+ABL候选代码完成 | 版本说明记录本地CPU测试31项通过、2项CUDA测试跳过；尚无服务器smoke或正式训练 | 审核后独立smoke |
+| `v0`：v02—v05 | 四个独立40k正式run已完成，当前代码已整理；整理后未在服务器重跑 | 固定验证mIoU依次75.53、75.59、76.32、76.32；本地保留原run导出，无新平台成绩 | 保留四组对照及原始路径；需要时单独复跑 |
+| `v1` 控制配置 | 已按v04实际解析配置建立，尚无新结构或v1 run | 本地配置解析仅在实验名与run目录上区别于v04快照；尚无v1验证成绩 | 后续结构设计前补齐v04完整验证混淆矩阵 |
 | `postprocess_rgb_crf` | 独立RGB DenseCRF流程完成 | 9项合成单元测试通过；尚无真实模型概率导出和全量验证结果 | 等训练模型胜出后再验证是否接入 |
 
-v02至v05的服务器smoke、正式训练及比较顺序由维护者统筹决定；CRF只在最终候选checkpoint上决定是否采用。详细实验记录见 `result.md`，每个版本的准确命令与验证状态见其 `version_notes.md`。
+v0四版使用同一增强流程，主要差异是CE+Lovasz、CE+Lovasz+ABL、CE+RMI、CE+RMI+ABL。v03的真实混淆比例不能替代v04结果；CRF只在最终候选checkpoint上决定是否采用。详细实验记录见 `result.md`，当前入口与证据边界见各阶段 `version_notes.md`。
 
 正式run、权重、数据、预测图和提交ZIP仅本地或服务器留存，不上传GitHub。
 

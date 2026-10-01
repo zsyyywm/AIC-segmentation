@@ -1,9 +1,0 @@
-mmcv>=2.0.0rc4,<2.2.0
-mmengine>=0.7.4,<1.0.0
-mmpretrain>=1.0.0rc7,<2.0.0
-matplotlib>=3.7,<4
-numpy>=1.24,<2
-Pillow
-prettytable
-regex
-rich>=13.7,<15

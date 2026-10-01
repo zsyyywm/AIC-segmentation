@@ -4,7 +4,7 @@
 
 ## 1. 协作流程
 
-维护者提供基线代码与说明，官方数据另行交给有权限的参赛成员。成员先用 `tools/check_uploaded_dataset.py` 核验数据，再学习基线、创建版本、提交分支。维护者选择审核与合并，并下载选定代码执行训练。
+维护者提供基线代码与说明，官方数据另行交给有权限的参赛成员。成员先用 `tools/check_uploaded_dataset.py` 核验数据，再从维护者指定的控制版本创建自己的独立版本、提交分支。维护者选择审核与合并，并决定训练。
 
 成员不必自行完成长训练，但必须如实标记哪些检查已执行、哪些未运行；不能把预计效果写成实验结果。
 
@@ -14,23 +14,26 @@
 code/
   mmsegmentation/                 共享框架，不复制到每个版本
   baseline_v1/                    原始参照，不在这里做新改进
-  v02_convnextb_loss_dice/         独立改进版本示例
-  v03_convnextb_aug_color/         另一个独立改进版本示例
+  v0/                             v02—v05 数据增强与损失基线实验归档
+  v1/                             网络结构改进阶段的 v04 等价控制入口
+  <独立候选版本>/                 后续成员分支中的新实验版本
 ```
 
-版本目录必须处于code同层，不嵌套到baseline内。每个版本保留自己的configs、aicseg、tools、requirements和version_notes；共享项目根的data与tools以及同级框架。
+版本目录必须处于code同层，不嵌套到baseline、v0或v1内。每个可训练版本保留自己的configs、aicseg、tools、requirements和version_notes；共享项目根的data与tools以及同级框架。v1不继承或导入v0代码。
+
+v0 的四个配置对应原 `code/v02_convnextb_d4_lovasz_gn`、`v03_convnextb_abl`、`v04_convnextb_rmi`、`v05_convnextb_rmi_abl` 四个独立正式run；旧目录、当前配置和本地归档路径见 `code/v0/version_notes.md`。v1 是结构改进控制配置，当前无新run或新模型成绩。原始 `baseline_v1` 不随本轮迁移。历史产物与诊断仅在本地被Git忽略的 `runs/` 下保留，不随版本目录交付。
 
 根tools负责通用检查、曲线、单模型报告和比较；版本tools负责该版本的训练与底层推理。不要把公共脚本复制到各版本。
 
 ## 3. 创建自己的版本
 
-1. 从最新基线或维护者指定的起点创建工作分支，例如 `feature/v02-convnextb-loss-dice`。
-2. 在code下新建 `v02_convnextb_loss_dice`，命名体现版本、模型与主要改动，避免final2/new等名称。
+1. 从维护者指定的起点创建工作分支。结构改进先以 `code/v1` 控制配置为比较依据，不把 v04 历史成绩写成新模型成绩。
+2. 在code下新建独立候选版本目录，命名体现模型与主要改动，避免final2/new等名称；不要直接覆盖 v1 控制入口。
 3. 从起点复制 `configs/`、`aicseg/`、`tools/`、`requirements.txt`、`version_notes.md`。不要复制runs、预测目录、权重、pycache、图片；已有tests不属于启动训练必需文件。
-4. 更新该版本配置的 `experiment_name`，例如 `v02_convnextb_loss_dice_768`，防止结果归属混淆。
+4. 更新该版本配置的 `experiment_name` 和run目录，防止与v0历史实验或v1控制run混淆。
 5. 在自己的版本中改代码，一次只改变一个主要因素。保留配置继承所依赖的文件；当前B继承同目录L配置，不能只复制B文件。
 
-不要只改文件夹名而仍把配置指向baseline目录。保持同层结构后，现有 `../../data` 与相邻框架路径通常不用改；具体以实际配置为准。
+不要只改文件夹名而仍把配置指向别的版本。保持同层结构后，现有 `../../data` 与相邻框架路径通常不用改；仍需逐项核验配置继承、工具的 `parents` 路径及独立模块导入。结构改动若要求损失或优化器参数分组调整，应单独列为变量并验证，不暗中并入控制配置。
 
 ## 4. 改动放在哪里
 
@@ -64,12 +67,13 @@ code/
 示例在项目根、已有Git仓库中执行；分支和版本名换成自己的实际值：
 
 ```bash
-git switch -c feature/v02-convnextb-loss-dice
+git switch -c feature/structure-candidate
 # 完成上面的独立版本修改之后
-git add code/v02_convnextb_loss_dice
+export VERSION_DIR=code/my_candidate
+git add "$VERSION_DIR"
 git diff --cached --stat
-git commit -m "Add ConvNeXt-B Dice loss experiment"
-git push -u origin feature/v02-convnextb-loss-dice
+git commit -m "Add structure candidate"
+git push -u origin feature/structure-candidate
 ```
 
 创建分支应在开始改动前做；已在该分支时不要再次执行switch -c。暂存后检查只包含本版本必要文件，不包含图片、权重、缓存、密钥或运行产物。

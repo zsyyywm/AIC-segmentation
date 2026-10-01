@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import math
+import re
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -47,6 +48,39 @@ def _step(record):
     if value is None or value < 0 or not value.is_integer():
         return None
     return int(value)
+
+
+_ITER_LINE = re.compile(r'Iter\((train|val)\)\s*\[\s*(\d+)/\d+\]')
+_LOG_NUMBER = re.compile(
+    r'(?<!\S)([A-Za-z][A-Za-z0-9./_]*):\s*'
+    r'(-?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?)')
+
+
+def _read_console_log(directory, manifest):
+    """Recover scalar records from exported runs without scalars.json."""
+    path = directory / 'console.log'
+    if not path.is_file():
+        return {}, {}
+    interval = int(manifest.get('validation_interval') or 0)
+    training, validations = {}, {}
+    last_train_step = 0
+    with path.open(encoding='utf-8', errors='replace') as handle:
+        for line in handle:
+            match = _ITER_LINE.search(line)
+            if not match:
+                continue
+            values = {key: float(value) for key, value in
+                      _LOG_NUMBER.findall(line[match.end():])}
+            if match.group(1) == 'train' and 'loss' in values:
+                step = int(match.group(2))
+                last_train_step = step
+                training[step] = dict(step=step, **values)
+            elif match.group(1) == 'val' and 'mIoU' in values:
+                if last_train_step <= 0 and interval <= 0:
+                    continue
+                step = last_train_step or (len(validations) + 1) * interval
+                validations[step] = dict(step=step, **values)
+    return training, validations
 
 
 def resolve_run(source):
@@ -109,6 +143,10 @@ def load_run(source):
         if bad_lines:
             warnings.append(
                 f'{path.relative_to(directory)}: {bad_lines} invalid lines skipped')
+    if not validations:
+        training, validations = _read_console_log(directory, manifest)
+        if validations:
+            warnings.append('metrics parsed from console.log')
     if not validations:
         raise ValueError(f'No validation mIoU found in: {directory}')
     return RunData(directory, manifest, summary, training, validations,
